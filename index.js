@@ -92,7 +92,21 @@ function getVehiclesCostInCreditsSumTotal(character) {
  * Sample data expected output: 27
 */
 function getStarshipPassengerAndCrewSumTotal(character) {
-  // TODO: Add your code here.
+  return character.starships.reduce( (acc, ship) => {
+    const crew = ship["crew"];
+    const passengers = ship["passengers"];
+    if ( crew !== null) {
+      if (passengers !== null) {
+        return acc  + crew + passengers;
+      } 
+      return acc + crew;
+    }
+    else if (passengers !== null) {
+      return acc + passengers;
+    } else {
+      return acc;
+    }
+  }, 0);
 }
 
 /**
@@ -110,6 +124,11 @@ function getStarshipPassengerAndCrewSumTotal(character) {
 */
 function getNthFilm(character, filmNumber) {
   // TODO: Add your code here.
+  if (filmNumber > 3 || filmNumber < 1) {
+    throw Error('There are only 3 Star Wars movies. Flan fiction excluded.');
+  } else {
+    return character.films[filmNumber-1];
+  }
 }
 
 /**
