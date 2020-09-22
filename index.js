@@ -19,6 +19,8 @@ function getName(character) {
   return character.name
 }
 
+
+
 /**
  * ### Challenge `getFilmCount`
  * MVP Challenge 🤓
@@ -123,7 +125,6 @@ function getStarshipPassengerAndCrewSumTotal(character) {
  * Given film #7, expected error: `There are only 3 Star Wars movies. Flan fiction excluded.`
 */
 function getNthFilm(character, filmNumber) {
-  // TODO: Add your code here.
   if (filmNumber > 3 || filmNumber < 1) {
     throw Error('There are only 3 Star Wars movies. Flan fiction excluded.');
   } else {
@@ -142,7 +143,29 @@ function getNthFilm(character, filmNumber) {
  * Sample data expected output: 80124
 */
 function getCargoCapacityTotal(character) {
-  // TODO: Add your code here.
+  const sumVehicles = character["vehicles"].reduce( (sum, vehicle) => {
+    const cap = vehicle["cargo_capacity"];
+    if (cap === null) { return sum; }
+    const filteredCap = filterInt(cap);
+    if (typeof filteredCap === "number") { return sum + filteredCap; } 
+    else {return sum;}
+  }, 0);
+  const sumStarships = character["starships"].reduce( (sum, ship) => {
+    const cap = ship["cargo_capacity"];
+    if (cap === null) { return sum; }
+    const filteredCap = filterInt(cap);
+    if (typeof filteredCap === "number") { return sum + filteredCap; } 
+    else { return sum; }
+  }, 0);
+  return sumVehicles + sumStarships;
+}
+
+function filterInt(value) {
+  if (/^[-+]?(\d+|Infinity)$/.test(value)) {
+    return Number(value)
+  } else {
+    return NaN
+  }
 }
 
 /**
@@ -157,7 +180,22 @@ function getCargoCapacityTotal(character) {
  * Sample data expected output: `X-wing`
 */
 function getFastestStarshipName(character) {
-  // TODO: Add your code here.
+  if (character["starships"].length <= 0) { return "none"; }
+  
+  let fastestSpeed = 0;
+  let fastestShip = "";
+
+  character["starships"].forEach( ship => {
+    const speed = ship["max_atmosphering_speed"];
+    if (speed === null ) { return; }
+    const filteredSpeed = filterInt(speed); 
+
+    if (filteredSpeed > fastestSpeed) {
+      fastestSpeed = filteredSpeed;
+      fastestShip = ship["name"];
+    }
+  });
+  return fastestShip;
 }
 
 /**
@@ -172,7 +210,19 @@ function getFastestStarshipName(character) {
  * Sample data expected output: `Lambda-class T-4a shuttle`
 */
 function getLargestCargoStarshipModelName(character) {
-  // TODO: Add your code here.
+  if (character["starships"].length <= 0) { return "none"; }
+  let largestCargoCap = 0;
+  let largestCargoModelName = "";
+  character["starships"].forEach( ship => {
+    const cargo = ship["cargo_capacity"];
+    if (cargo === null) { return; }
+    const filteredCargo = filterInt(cargo);
+    if (filteredCargo > largestCargoCap) { 
+      largestCargoCap = filteredCargo;
+      largestCargoModelName = ship["model"];
+    }
+  });
+  return largestCargoModelName;
 }
 
 /**
