@@ -236,7 +236,30 @@ function getLargestCargoStarshipModelName(character) {
  *
 */
 function getSlowestVehicleOrStarshipName(character) {
-  // TODO: Add your code here.
+  if (character["starships"] === 0 && character["vehicles"] === 0) { return "none"; }
+
+  let slowestSpeed = Infinity;
+  let slowestTransport = "";
+  character["starships"].forEach( ship => {
+    const speed = ship["max_atmosphering_speed"];
+    if (speed === null) { return; }
+    const filteredSpeed = filterInt(speed);
+    if (filteredSpeed < slowestSpeed) { 
+      slowestSpeed = filteredSpeed;
+      slowestTransport = ship["name"];
+    }
+  });
+  character["vehicles"].forEach( veh => {
+    const speed = veh["max_atmosphering_speed"];
+    if (speed === null) { return; }
+    const filteredSpeed = filterInt(speed);
+    if (filteredSpeed < slowestSpeed) { 
+      slowestSpeed = filteredSpeed;
+      slowestTransport = veh["name"];
+    }
+  });
+  return slowestTransport;
+
 }
 
 
